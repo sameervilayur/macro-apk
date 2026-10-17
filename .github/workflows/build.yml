@@ -18,26 +18,22 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 3. Set up JDK 21 (Required for Android Gradle)
+      - name: 3. Set up JDK 17 (Matches Capacitor 6 Android Gradle)
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
       - name: 4. Install Dependencies & Build React Web App
         run: |
           npm install
           npm run build
 
-      - name: 5. Install & Initialize Capacitor Android (In the Cloud)
+      - name: 5. Install & Initialize Capacitor 6 Android
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          if [ ! -f "capacitor.config.json" ] && [ ! -f "capacitor.config.ts" ]; then
-            npx cap init "Macro Calculator" com.sameer.macrocalculator --web-dir dist
-          fi
-          if [ ! -d "android" ]; then
-            npx cap add android
-          fi
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+          npx cap init "Macro Calculator" com.sameer.macrocalculator --web-dir dist
+          npx cap add android
           npx cap sync android
 
       - name: 6. Compile Debug APK with Gradle
